@@ -260,3 +260,4 @@ D:\.Net\Projects\ATM Simulation System\ATM Simulation System\bin\Debug\net8.0\ru
 D:\.Net\Projects\ATM Simulation System\ATM Simulation System\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 D:\.Net\Projects\ATM Simulation System\ATM Simulation System\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\.Net\Projects\ATM Simulation System\ATM Simulation System\obj\Debug\net8.0\ATM Simulation System.MvcApplicationPartsAssemblyInfo.cs
+D:\.Net\Projects\ATM Simulation System\ATM Simulation System\obj\Debug\net8.0\ATM Simulation System.sourcelink.json
