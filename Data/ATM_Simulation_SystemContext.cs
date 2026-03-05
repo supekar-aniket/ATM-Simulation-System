@@ -15,5 +15,6 @@ namespace ATM_Simulation_System.Data
         }
 
         public DbSet<ATM_Simulation_System.Models.Account> Account { get; set; } = default!;
+        public DbSet<ATM_Simulation_System.Models.Card> Card { get; set; } = default!;
     }
 }

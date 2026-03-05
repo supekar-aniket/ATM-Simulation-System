@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ATM_Simulation_System.Models
 {
+    [Index(nameof(CardNumber), IsUnique = true)] //Two Card cannot have the same CardNumber
     public class Card
     {
         [Key]

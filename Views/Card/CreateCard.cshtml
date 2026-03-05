@@ -1,0 +1,92 @@
+﻿@model ATM_Simulation_System.Models.Card
+
+@{
+    ViewData["Title"] = "Generate Card";
+}
+
+<h1 class="mb-4 text-center">Generate ATM Card</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+
+        @* Error Messages *@
+        <div asp-validation-summary="All" class="text-danger mb-3"></div> 
+
+        <form asp-action="CreateCard" method="post">
+
+            <input type="hidden" asp-for="AccountId" id="AccountId" name="AccountId" />
+
+            <!-- Enter PIN -->
+            <div class="mb-3">
+                <label class="form-label">Enter PIN</label>
+                <input id="pin" name="pin" type="password" maxlength="4" class="form-control" placeholder="Enter 4 digit PIN" required />
+            </div>
+
+            <!-- Confirm PIN -->
+            <div class="mb-3">
+                <label class="form-label">Confirm PIN</label>
+                <input id="confirmPin" name="confirmPin" type="password" maxlength="4" class="form-control" placeholder="Confirm PIN" required />
+                <small id="pinMessage"></small>
+            </div>
+
+            <!-- Expiry Date -->
+            <div class="mb-3">
+                <label asp-for="ExpiryDate" class="form-label"></label>
+                <input asp-for="ExpiryDate" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-sm flex-fill">
+                    Generate Card
+                </button>
+
+                <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary btn-sm flex-fill">
+                    Back
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back</a>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        const pin = document.getElementById("pin");
+        const confirmPin = document.getElementById("confirmPin");
+        const message = document.getElementById("pinMessage");
+
+        function checkPin(){
+
+            if(confirmPin.value.length === 0){
+                message.innerHTML = "";
+                return;
+            }
+
+            if(pin.value === confirmPin.value){
+                message.innerHTML = "PIN matched";
+                message.style.color = "green";
+            }
+            else{
+                message.innerHTML = "PIN does not match";
+                message.style.color = "red";
+            }
+
+        }
+
+        pin.addEventListener("keyup", checkPin);
+        confirmPin.addEventListener("keyup", checkPin);
+
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

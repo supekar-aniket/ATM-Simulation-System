@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ATM_Simulation_System.Controllers
 {
@@ -22,8 +23,9 @@ namespace ATM_Simulation_System.Controllers
             var userId = _userManager.GetUserId(User);
 
             var accounts = _context.Accounts
-            .Where(a => a.UserId == userId)
-            .ToList();
+                .Include(a => a.Cards)   // load card
+                .Where(a => a.UserId == userId)
+                .ToList();
 
             ViewBag.HasAccount = accounts.Any();
 

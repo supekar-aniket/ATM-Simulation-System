@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ATM_Simulation_System.Models
 {
-    [Index(nameof(AccountNumber), IsUnique = true)]
+    [Index(nameof(AccountNumber), IsUnique = true)] //Two accounts cannot have the same AccountNumber
     public class Account
     {
         [Key]

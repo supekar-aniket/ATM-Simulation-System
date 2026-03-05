@@ -26,6 +26,7 @@ namespace ATM_Simulation_System.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAccount(string accountType)
         {
             var userId = _userManager.GetUserId(User);
