@@ -11,7 +11,7 @@ namespace ATM_Simulation_System.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ATM_Simulation_SystemUser> _userManager;
 
-        public DashboardController(ApplicationDbContext dbContext,UserManager<ATM_Simulation_SystemUser> userManager)
+        public DashboardController(ApplicationDbContext dbContext, UserManager<ATM_Simulation_SystemUser> userManager)
         {
             _context = dbContext;
             _userManager = userManager;
@@ -21,11 +21,14 @@ namespace ATM_Simulation_System.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
-            var account = _context.Accounts.FirstOrDefault(x => x.UserId == userId);
+            var accounts = _context.Accounts
+            .Where(a => a.UserId == userId)
+            .ToList();
 
-            ViewBag.HasAccount = account != null;
+            ViewBag.HasAccount = accounts.Any();
 
-            return View();
+            return View(accounts);
         }
+
     }
 }

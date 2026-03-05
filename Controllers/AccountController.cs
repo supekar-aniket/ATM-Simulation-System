@@ -30,6 +30,21 @@ namespace ATM_Simulation_System.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
+            if (string.IsNullOrEmpty(accountType))
+            {
+                ModelState.AddModelError("", "Please select an account type.");
+                return View();
+            }
+
+            var totalAccounts = await _context.Accounts
+                .CountAsync(a => a.UserId == userId);
+
+            if (totalAccounts >= 2)
+            {
+                ModelState.AddModelError("", "You already have the maximum number of accounts.");
+                return View();
+            }
+
             var existingAccount = await _context.Accounts
                 .FirstOrDefaultAsync(a => a.UserId == userId && a.AccountType == accountType);
 
@@ -56,14 +71,15 @@ namespace ATM_Simulation_System.Controllers
 
         private string GenerateAccountNumber()
         {
-            var guid = Guid.NewGuid().ToString("N"); // remove hyphens
+            Random random = new Random();
+            string number = "";
 
-            string numbers = new string(guid.Where(char.IsDigit).ToArray());
+            for (int i = 0; i < 16; i++)
+            {
+                number += random.Next(0, 10).ToString();
+            }
 
-            if (numbers.Length < 16)
-                numbers = numbers.PadRight(16, '0');
-
-            return numbers.Substring(0, 16);
+            return number;
         }
     }
 }

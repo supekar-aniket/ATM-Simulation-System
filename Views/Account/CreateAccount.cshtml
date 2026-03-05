@@ -10,6 +10,9 @@
 
             <h2 class="text-center mb-4">Create Bank Account</h2>
 
+            @* Error Messages *@
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
             <form asp-action="CreateAccount" method="post">
 
                 <div class="mb-3">
