@@ -1,0 +1,95 @@
+﻿@model ATM_Simulation_System.Models.Account
+@using ATM_Simulation_System.Helper
+
+@{
+    ViewData["Title"] = "Account Info";
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg p-4">
+
+        <div class="row">
+
+            <!-- Account Info -->
+            <div class="col-md-6 border-end">
+
+                <h4 class="mb-4">Account Info</h4>
+
+                <p>
+                    <strong>Account Holder Name :</strong> @Model.User.FirstName @Model.User.LastName
+                </p>
+
+                <p>
+                    <strong>Account Number :</strong> @Model.AccountNumber
+                </p>
+
+                <p>
+                    <strong>Account Type :</strong> @Model.AccountType
+                </p>
+
+                @if (Model.Cards != null && Model.Cards.Any())
+                {
+                    <p>
+                        <strong>Card Number :</strong>
+                        @MaskCardHelper.MaskCardNumber(Model.Cards.First().CardNumber)
+                    </p>
+                }
+
+                <p>
+                    <strong>Current Balance :</strong> @Model.Balance
+                </p>
+
+            </div>
+
+
+            <!-- Actions -->
+            <div class="col-md-6 text-center">
+
+                <h4 class="mb-4">Actions</h4>
+
+                <div class="d-grid gap-3 col-6 mx-auto">
+
+                    <a asp-controller="Transaction"
+                       asp-action="Deposit"
+                       asp-route-accountId="@Model.AccountId"
+                       class="btn btn-success btn-sm">
+                        Deposit
+                    </a>
+
+                    <a asp-controller="Transaction"
+                       asp-action="Withdraw"
+                       asp-route-accountId="@Model.AccountId"
+                       class="btn btn-warning btn-sm">
+                        Withdraw
+                    </a>
+
+                    <a asp-controller="Transaction"
+                       asp-action="Balance"
+                       asp-route-accountId="@Model.AccountId"
+                       class="btn btn-primary btn-sm">
+                        Show Card
+                    </a>
+
+                    <a asp-controller="Transaction"
+                       asp-action="ChangePin"
+                       asp-route-accountId="@Model.AccountId"
+                       class="btn btn-primary btn-sm">
+                        Change Pin
+                    </a>
+
+                    <a asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="btn btn-secondary btn-sm flex-fill">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

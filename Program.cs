@@ -38,4 +38,6 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
+app.UseDeveloperExceptionPage();
+
 app.Run();

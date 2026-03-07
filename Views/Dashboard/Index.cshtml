@@ -9,6 +9,16 @@
     <h2>ATM Dashboard</h2>
     <br />
 
+    @* Error Messages *@
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="text-danger mb-3">
+            @TempData["Error"]
+        </div>
+    }
+
     @if (!Model.Any())
     {
         <div class="alert alert-warning">
@@ -47,12 +57,21 @@
                                 </button>
                             }
 
-                            <a asp-controller="Transaction"
-                               asp-action="Index"
-                               asp-route-id="@acc.UserId"
-                               class="btn btn-success btn-sm w-50">
-                                Open
-                            </a>
+                            @if (acc.Cards == null || !acc.Cards.Any())
+                            {
+                                <button class="btn btn-secondary btn-sm w-50" hidden>
+                                    Open
+                                </button>
+                            }
+                            else
+                            {
+                                <a asp-controller="Dashboard"
+                                   asp-action="VerifyPin"
+                                   asp-route-accountId="@acc.AccountId"
+                                   class="btn btn-success btn-sm w-50">
+                                    Open
+                                </a>
+                            }
                         </div>
                         
                     </div>

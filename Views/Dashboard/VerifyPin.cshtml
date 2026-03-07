@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Verify Pin";
+}
+
+<h1 class="mb-4 text-center">Enter 4 Digit PIN</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+
+        <div class="text-danger mb-3" asp-validation-summary="All"></div>
+
+        <form asp-action="VerifyPin" method="post">
+
+            <!-- IMPORTANT -->
+            <input type="hidden" name="accountId" value="@ViewBag.AccountId" />
+
+            <!-- Enter PIN -->
+            <div class="mb-3">
+                <label class="form-label">Enter PIN</label>
+                <input type="password"
+                       name="pin"
+                       maxlength="4"
+                       class="form-control"
+                       placeholder="Enter 4 digit PIN"
+                       required />
+            </div>
+
+            <div class="mb-3 d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-primary btn-sm flex-fill">
+                    Verify PIN
+                </button>
+
+                <a asp-controller="Dashboard"
+                   asp-action="Index"
+                   class="btn btn-secondary btn-sm flex-fill">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
