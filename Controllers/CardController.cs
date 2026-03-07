@@ -10,20 +10,20 @@ namespace ATM_Simulation_System.Controllers
     [Authorize]
     public class CardController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ATM_Simulation_SystemUser> _userManager;
         private static readonly Random random = new Random();
 
-        public CardController(ApplicationDbContext dbContext,UserManager<ATM_Simulation_SystemUser> userManager)
+        public CardController(ApplicationDbContext context,UserManager<ATM_Simulation_SystemUser> userManager)
         {
-            _dbContext = dbContext;
+            _context = context;
             _userManager = userManager;
         }
 
         [HttpGet]
         public IActionResult CreateCard(int accountId)
         {
-            var account = _dbContext.Accounts.FirstOrDefault(x => x.AccountId == accountId);
+            var account = _context.Accounts.FirstOrDefault(x => x.AccountId == accountId);
 
             if (account == null)
             {
@@ -68,7 +68,7 @@ namespace ATM_Simulation_System.Controllers
             }
 
             // Check if card already exists
-            var existingCard = _dbContext.Cards.Any(x => x.AccountId == card.AccountId);
+            var existingCard = _context.Cards.Any(x => x.AccountId == card.AccountId);
 
             if (existingCard)
             {
@@ -76,7 +76,7 @@ namespace ATM_Simulation_System.Controllers
                 return View(card);
             }
 
-            var account = _dbContext.Accounts.FirstOrDefault(x => x.AccountId == card.AccountId);
+            var account = _context.Accounts.FirstOrDefault(x => x.AccountId == card.AccountId);
 
             if (account == null)
             {
@@ -93,10 +93,65 @@ namespace ATM_Simulation_System.Controllers
             card.ExpiryDate = DateTime.Now.AddYears(5);
             card.IsActive = true;
 
-            _dbContext.Cards.Add(card);
-            await _dbContext.SaveChangesAsync();
+            _context.Cards.Add(card);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", "Dashboard");
+        }
+
+        [HttpGet]
+        public IActionResult ChangePin(int accountId)
+        {
+            var card = _context.Cards.FirstOrDefault(x => x.AccountId == accountId);
+
+            if(card == null)
+            {
+                ModelState.AddModelError("", "Card not found.");
+            }
+
+            return View(card);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePin(int accountId, string oldPin, string newPin, string confirmPin)
+        {
+            var card = _context.Cards.FirstOrDefault(x => x.AccountId == accountId);
+
+            if (card == null)
+            {
+                ModelState.AddModelError("", "Card not found.");
+                return View();
+            }
+
+            var hasher = new PasswordHasher<Card>();
+
+            var result = hasher.VerifyHashedPassword(card, card.PinHash, oldPin);
+
+            if (result == PasswordVerificationResult.Failed)
+            {
+                ModelState.AddModelError("", "Old PIN is incorrect.");
+                return View(card);
+            }
+
+            if (newPin.Length != 4 || !newPin.All(char.IsDigit))
+            {
+                ModelState.AddModelError("", "PIN must be 4 digits.");
+                return View(card);
+            }
+
+            if (newPin != confirmPin)
+            {
+                ModelState.AddModelError("", "New PIN and Confirm PIN do not match.");
+                return View(card);
+            }
+
+            // Hash new PIN
+            card.PinHash = hasher.HashPassword(card, newPin);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("AccountInfo", "Dashboard");
         }
 
 

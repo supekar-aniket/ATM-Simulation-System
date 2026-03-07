@@ -17,11 +17,9 @@
             <!-- Enter PIN -->
             <div class="mb-3">
                 <label class="form-label">Enter PIN</label>
-                <input type="password"
-                       name="pin"
-                       maxlength="4"
-                       class="form-control"
-                       placeholder="Enter 4 digit PIN"
+                <input type="password" name="pin" id="pin" maxlength="4"
+                       pattern="[0-9]{4}" inputmode="numeric"
+                       class="form-control" placeholder="Enter 4 digit PIN"
                        required />
             </div>
 
@@ -45,3 +43,29 @@
     </div>
 
 </div>
+
+@section Scripts {
+
+    <script>
+
+        function allowDigitsOnly(input){
+
+            input.addEventListener("input", function(){
+
+                if(/[^0-9]/.test(this.value)){
+                    this.value = this.value.replace(/[^0-9]/g,'');
+                }
+
+            });
+
+        }
+
+        allowDigitsOnly(document.getElementById("pin"));
+
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

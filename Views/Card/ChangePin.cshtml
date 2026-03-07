@@ -1,50 +1,55 @@
 ﻿@model ATM_Simulation_System.Models.Card
 
 @{
-    ViewData["Title"] = "Create Card";
+    ViewData["Title"] = "Change PIN";
 }
 
-<h1 class="mb-4 text-center">Generate ATM Card</h1>
+<h1 class="mb-4 text-center">Change ATM PIN</h1>
 
 <div class="row justify-content-center">
     <div class="col-md-4">
 
         @* Error Messages *@
-        <div asp-validation-summary="All" class="text-danger mb-3"></div> 
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-        <form asp-action="CreateCard" method="post">
+        <form asp-action="ChangePin" method="post">
 
-            <input type="hidden" asp-for="AccountId" id="AccountId" name="AccountId" />
+            <input type="hidden" name="accountId" value="@Model.AccountId" />
 
-            <!-- Enter PIN -->
+            <!-- Old PIN -->
             <div class="mb-3">
-                <label class="form-label">Enter PIN</label>
-                <input id="pin" name="pin" type="password" maxlength="4"
-                       pattern="[0-9]{4}" inputmode="numeric" 
-                       class="form-control" placeholder="Enter 4 digit PIN" required />
+                <label class="form-label">Old PIN</label>
+                <input id="oldPin" name="oldPin" type="password" maxlength="4"
+                       pattern="[0-9]{4}" inputmode="numeric"
+                       class="form-control" placeholder="Enter Old PIN" required />
+            </div>
+
+            <!-- New PIN -->
+            <div class="mb-3">
+                <label class="form-label">New PIN</label>
+                <input id="newPin" name="newPin" type="password" maxlength="4"
+                       pattern="[0-9]{4}" inputmode="numeric"
+                       class="form-control" placeholder="Enter New PIN" required />
             </div>
 
             <!-- Confirm PIN -->
             <div class="mb-3">
                 <label class="form-label">Confirm PIN</label>
                 <input id="confirmPin" name="confirmPin" type="password" maxlength="4"
-                       pattern="[0-9]{4}" inputmode="numeric" 
-                       class="form-control" placeholder="Confirm PIN" required />
+                       pattern="[0-9]{4}" inputmode="numeric"
+                       class="form-control" placeholder="Confirm New PIN" required />
                 <small id="pinMessage"></small>
-            </div>
-
-            <!-- Expiry Date -->
-            <div class="mb-3">
-                <label asp-for="ExpiryDate" class="form-label"></label>
-                <input asp-for="ExpiryDate" class="form-control" readonly />
             </div>
 
             <div class="mb-3 d-flex gap-2">
                 <button type="submit" class="btn btn-primary btn-sm flex-fill">
-                    Generate Card
+                    Change PIN
                 </button>
 
-                <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary btn-sm flex-fill">
+                <a asp-controller="Dashboard" 
+                    asp-action="AccountInfo"
+                    asp-route-accountId="@Model.AccountId"
+                   class="btn btn-secondary btn-sm flex-fill">
                     Back
                 </a>
             </div>
@@ -54,15 +59,11 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back</a>
-</div>
-
 @section Scripts {
 
     <script>
 
-        const pin = document.getElementById("pin");
+        const newPin = document.getElementById("newPin");
         const confirmPin = document.getElementById("confirmPin");
         const message = document.getElementById("pinMessage");
 
@@ -73,7 +74,7 @@
                 return;
             }
 
-            if(pin.value === confirmPin.value){
+            if(newPin.value === confirmPin.value){
                 message.innerHTML = "PIN matched";
                 message.style.color = "green";
             }
@@ -84,7 +85,7 @@
 
         }
 
-        pin.addEventListener("keyup", checkPin);
+        newPin.addEventListener("keyup", checkPin);
         confirmPin.addEventListener("keyup", checkPin);
 
         function allowDigitsOnly(input){
@@ -99,7 +100,8 @@
 
         }
 
-        allowDigitsOnly(document.getElementById("pin"));
+        allowDigitsOnly(document.getElementById("oldPin"));
+        allowDigitsOnly(document.getElementById("newPin"));
         allowDigitsOnly(document.getElementById("confirmPin"));
 
     </script>
