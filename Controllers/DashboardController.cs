@@ -38,9 +38,11 @@ namespace ATM_Simulation_System.Controllers
         [HttpGet]
         public IActionResult VerifyPin(int accountId)
         {
+            var userId = _userManager.GetUserId(User);
+
             var account = _context.Accounts
                 .Include(a => a.Cards)
-                .FirstOrDefault(a => a.AccountId == accountId);
+                .FirstOrDefault(a => a.AccountId == accountId && a.UserId == userId);
 
             if (account == null)
             {
@@ -62,9 +64,11 @@ namespace ATM_Simulation_System.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult VerifyPin(string pin, int accountId)
         {
+            var userId = _userManager.GetUserId(User);
+
             var account = _context.Accounts
                 .Include(x => x.Cards)
-                .FirstOrDefault(x => x.AccountId == accountId);
+                .FirstOrDefault(x => x.AccountId == accountId && x.UserId == userId);
 
             var card = account.Cards.FirstOrDefault();
 

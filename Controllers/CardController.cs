@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.EntityFrameworkCore;
 
 namespace ATM_Simulation_System.Controllers
 {
@@ -23,7 +24,10 @@ namespace ATM_Simulation_System.Controllers
         [HttpGet]
         public IActionResult CreateCard(int accountId)
         {
-            var account = _context.Accounts.FirstOrDefault(x => x.AccountId == accountId);
+            var userId = _userManager.GetUserId(User);
+
+            var account = _context.Accounts.
+                FirstOrDefault(x => x.AccountId == accountId && x.UserId == userId);
 
             if (account == null)
             {
@@ -76,7 +80,10 @@ namespace ATM_Simulation_System.Controllers
                 return View(card);
             }
 
-            var account = _context.Accounts.FirstOrDefault(x => x.AccountId == card.AccountId);
+            var userId = _userManager.GetUserId(User);
+
+            var account = _context.Accounts.
+                FirstOrDefault(x => x.AccountId == card.AccountId && x.UserId == userId);
 
             if (account == null)
             {
@@ -116,7 +123,11 @@ namespace ATM_Simulation_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePin(int accountId, string oldPin, string newPin, string confirmPin)
         {
-            var card = _context.Cards.FirstOrDefault(x => x.AccountId == accountId);
+            var userId = _userManager.GetUserId(User);
+
+            var card = _context.Cards.
+                Include(x => x.Account).
+                FirstOrDefault(x => x.AccountId == accountId && x.Account.UserId == userId);
 
             if (card == null)
             {

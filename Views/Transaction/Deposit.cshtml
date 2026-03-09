@@ -1,0 +1,103 @@
+﻿@model ATM_Simulation_System.Models.Account
+
+@{
+    ViewData["Title"] = "Deposit";
+}
+
+<h1 class="mb-4 text-center">Deposit Money</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <form asp-action="Deposit" method="post">
+
+            <input type="hidden" name="accountId" value="@Model.AccountId" />
+
+            <!-- Quick Cash -->
+            <div class="mb-3">
+                <label class="form-label">Quick Cash</label>
+
+                <div class="row g-2">
+
+                    <div class="col-6">
+                        <button type="button" class="btn btn-outline-primary quick-btn w-100" data-amount="500">
+                            ₹500
+                        </button>
+                    </div>
+
+                    <div class="col-6">
+                        <button type="button" class="btn btn-outline-primary quick-btn w-100" data-amount="1000">
+                            ₹1000
+                        </button>
+                    </div>
+
+                    <div class="col-6">
+                        <button type="button" class="btn btn-outline-primary quick-btn w-100" data-amount="1500">
+                            ₹1500
+                        </button>
+                    </div>
+
+                    <div class="col-6">
+                        <button type="button" class="btn btn-outline-primary quick-btn w-100" data-amount="2000">
+                            ₹2000
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Enter Amount -->
+            <div class="mb-3">
+                <label class="form-label">Enter Amount</label>
+
+                <input id="amountInput"
+                       type="text"
+                       inputmode="numeric"
+                       pattern="[0-9]*"
+                       name="amount"
+                       class="form-control"
+                       placeholder="Enter amount"
+                       required />
+                <small class="text-muted">
+                    Minimum ₹100 | Maximum ₹50,000 | Multiple of ₹100
+                </small>
+            </div>
+
+            <div class="mb-3 d-flex gap-2">
+
+                <button type="submit" class="btn btn-success btn-sm flex-fill">
+                    Deposit
+                </button>
+
+                <a asp-controller="Dashboard"
+                   asp-action="AccountInfo"
+                   asp-route-accountId="@Model.AccountId"
+                   class="btn btn-secondary btn-sm flex-fill">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        const buttons = document.querySelectorAll(".quick-btn");
+        const amountInput = document.getElementById("amountInput");
+
+        buttons.forEach(btn => {
+            btn.addEventListener("click", function(){
+                amountInput.value = this.dataset.amount;
+            });
+        });
+
+    </script>
+
+}
