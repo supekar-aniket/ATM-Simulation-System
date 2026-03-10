@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+﻿    // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -110,13 +110,30 @@ namespace ATM_Simulation_System.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                // Find user by email
+                var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToAction("Index","Dashboard");
+
+                    // Role-based redirect
+                    if (await _signInManager.UserManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return LocalRedirect("~/Admin/Index");
+                    }
+                    else if (await _signInManager.UserManager.IsInRoleAsync(user, "User"))
+                    {
+                        return LocalRedirect("~/Dashboard/Index");
+                    }
+                    else
+                    {
+                        // fallback if user has no role
+                        return LocalRedirect("~/");
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {

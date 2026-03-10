@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4 text-center">Admin Dashboard</h2>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4">
+
+        <div class="col-md-3">
+            <div class="card shadow text-center p-3">
+                <h5>Total Users</h5>
+                <h3 class="text-primary">@ViewBag.TotalUsers</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow text-center p-3">
+                <h5>Total Accounts</h5>
+                <h3 class="text-success">@ViewBag.TotalAccounts</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow text-center p-3">
+                <h5>Total Cards</h5>
+                <h3 class="text-warning">@ViewBag.TotalCards</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow text-center p-3">
+                <h5>Transactions Today</h5>
+                <h3 class="text-danger">@ViewBag.TotalTransactions</h3>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Quick Actions -->
+    <div class="row mt-5 g-4">
+
+        <div class="col-md-3">
+            <a asp-controller="Admin" asp-action="Users" class="text-decoration-none">
+                <div class="card shadow text-center p-4">
+                    <h5>Manage Users</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a asp-controller="Admin" asp-action="Accounts" class="text-decoration-none">
+                <div class="card shadow text-center p-4">
+                    <h5>Manage Accounts</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a asp-controller="Admin" asp-action="Cards" class="text-decoration-none">
+                <div class="card shadow text-center p-4">
+                    <h5>Manage Cards</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a asp-controller="Admin" asp-action="Transactions" class="text-decoration-none">
+                <div class="card shadow text-center p-4">
+                    <h5>View Transactions</h5>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+</div>
