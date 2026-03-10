@@ -165,6 +165,25 @@ namespace ATM_Simulation_System.Controllers
             return RedirectToAction("AccountInfo", "Dashboard");
         }
 
+        [HttpGet]
+        public IActionResult ShowCard(int accountId)
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var card = _context.Cards
+                .Include(x => x.Account)
+                .ThenInclude(x => x.User)
+                .FirstOrDefault(x => x.AccountId == accountId && x.Account.UserId == userId);
+
+            if (card == null)
+            {
+                ModelState.AddModelError("", "Card not found.");
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            return View(card);
+        }
+
 
         private string GenerateCardNumber(string accountNumber)
         {

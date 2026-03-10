@@ -1,5 +1,6 @@
 ﻿using ATM_Simulation_System.Areas.Identity.Data;
 using ATM_Simulation_System.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using System.Transactions;
 
 namespace ATM_Simulation_System.Controllers
 {
+    [Authorize]
     public class TransactionController : Controller
     {
         private readonly UserManager<ATM_Simulation_SystemUser> _userManager;

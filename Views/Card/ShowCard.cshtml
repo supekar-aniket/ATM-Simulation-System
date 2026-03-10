@@ -1,0 +1,124 @@
+﻿@model ATM_Simulation_System.Models.Card
+@using ATM_Simulation_System.Helper
+
+<div class="container mt-5 text-center">
+
+    <!-- CARD FRONT -->
+    <div id="cardFront" class="card text-white shadow-lg p-3 mx-auto"
+         style="width:360px;height:200px;border-radius:18px;
+     background:linear-gradient(135deg,#1e3c72,#2a5298);">
+
+        <div class="d-flex justify-content-between">
+            <h5 class="mb-0">ATM CARD</h5>
+            <span class="fw-bold">YZ BANK</span>
+        </div>
+
+        <div class="bg-warning mt-2"
+             style="width:45px;height:35px;border-radius:6px;"></div>
+
+        <div class="mt-2 fw-bold"
+             style="font-size:22px;letter-spacing:3px;"
+             id="cardNumber"
+             data-full="@Model.CardNumber">
+
+            @MaskCardHelper.MaskCardNumber(Model.CardNumber)
+
+        </div>
+
+        <div class="d-flex justify-content-between mt-2">
+
+            <div>
+                <small>Card Holder</small>
+                <div class="fw-bold">
+                    @Model.Account.User.FirstName @Model.Account.User.LastName
+                </div>
+            </div>
+
+            <div class="text-end">
+                <small>Expires</small>
+                <div class="fw-bold">
+                    @Model.ExpiryDate.ToString("MM/yy")
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CARD BACK -->
+    <div id="cardBack" class="card text-white shadow-lg p-3 mx-auto d-none"
+         style="width:360px;height:200px;border-radius:18px;
+     background:linear-gradient(135deg,#1e3c72,#2a5298);">
+
+        <div class="bg-dark mb-4" style="height:40px;"></div>
+
+        <div class="bg-light p-2 d-flex justify-content-between align-items-center">
+            <span class="text-muted">Signature</span>
+            <strong style="color:black">123</strong>
+        </div>
+
+        <div class="text-center mt-4 fw-bold">
+            YZ BANK
+        </div>
+
+    </div>
+
+
+    <!-- BUTTON -->
+    <button class="btn btn-sm btn-outline-primary mt-3" onclick="toggleCard()">
+        Flip Card
+    </button>
+
+    @* Show Card Number *@
+    <button class="btn btn-sm btn-outline-primary mt-3 ms-3"onclick="toggleCardNumber()">
+        👁 
+    </button>
+
+    <a asp-controller="Dashboard"
+       asp-action="AccountInfo"
+       asp-route-accountId="@Model.AccountId"
+       class="btn btn-sm btn-outline-primary mt-3 ms-3">
+        Back
+    </a>
+
+</div>
+
+<script>
+
+    function toggleCard(){
+
+        const front = document.getElementById("cardFront");
+        const back = document.getElementById("cardBack");
+
+        front.classList.toggle("d-none");
+        back.classList.toggle("d-none");
+
+    }
+
+    let isVisible = false;
+
+    function formatCardNumber(number) {
+        return number.match(/.{1,4}/g).join(" ");
+    }
+
+    function toggleCardNumber(){
+
+        const cardNumberElement = document.getElementById("cardNumber");
+        const fullNumber = cardNumberElement.dataset.full;
+
+        if(!isVisible)
+        {
+            cardNumberElement.innerText = formatCardNumber(fullNumber);
+            isVisible = true;
+        }
+        else
+        {
+            cardNumberElement.innerText = " XXXX XXXX XXXX " + fullNumber.slice(-4);
+            isVisible = false;
+        }
+
+    }
+
+
+</script>
