@@ -17,12 +17,19 @@ namespace ATM_Simulation_System.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             ViewBag.TotalUsers = _userManager.Users.Count();
             ViewBag.TotalAccounts = _context.Accounts.Count();
             ViewBag.TotalCards = _context.Cards.Count();
-            ViewBag.TotalTransactions = _context.Transactions.Count();
+            ViewBag.TotalTransactions = _context.Transactions.Where(x => x.TransactionDate.Date == DateTime.Today).Count();
+
+            // Recent 5 transactions
+            ViewBag.RecentTransactions = _context.Transactions
+                .OrderByDescending(x => x.TransactionDate)
+                .Take(5)
+                .ToList();
 
             return View();
         }
