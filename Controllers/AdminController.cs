@@ -18,12 +18,16 @@ namespace ATM_Simulation_System.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewBag.TotalUsers = _userManager.Users.Count();
+            var users = await _userManager.GetUsersInRoleAsync("User");
+
+            ViewBag.TotalUsers = users.Count;
             ViewBag.TotalAccounts = _context.Accounts.Count();
             ViewBag.TotalCards = _context.Cards.Count();
-            ViewBag.TotalTransactions = _context.Transactions.Where(x => x.TransactionDate.Date == DateTime.Today).Count();
+            ViewBag.TotalTransactions = _context.Transactions
+                .Where(x => x.TransactionDate.Date == DateTime.Today)
+                .Count();
 
             // Recent 5 transactions
             ViewBag.RecentTransactions = _context.Transactions
